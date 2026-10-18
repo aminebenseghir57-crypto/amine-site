@@ -19,3 +19,28 @@ document.getElementById('copy-request').addEventListener('click', async () => {
     document.getElementById('copy-status').textContent = ' Sélectionnez « Copier » dans votre navigateur.';
   }
 });
+const menuToggle = document.querySelector('.menu-toggle');
+const navigation = document.getElementById('main-nav');
+function closeMenu() {
+  menuToggle.setAttribute('aria-expanded', 'false');
+  menuToggle.setAttribute('aria-label', 'Ouvrir le menu');
+  navigation.classList.remove('open');
+}
+menuToggle.addEventListener('click', () => {
+  const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
+  menuToggle.setAttribute('aria-expanded', String(!isOpen));
+  menuToggle.setAttribute('aria-label', isOpen ? 'Ouvrir le menu' : 'Fermer le menu');
+  navigation.classList.toggle('open', !isOpen);
+});
+navigation.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && menuToggle.getAttribute('aria-expanded') === 'true') {
+    closeMenu();
+    menuToggle.focus();
+  }
+});
+document.querySelectorAll('[data-service]').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelector('select[name="service"]').value = card.dataset.service;
+  });
+});
